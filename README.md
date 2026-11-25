@@ -1,24 +1,24 @@
 # wenet-server
 
-维语 ARM CPU 在线 ASR 服务：WeNet CTC + WebSocket。
+维语 ARM CPU 流式语音识别服务。模型是在线 WeNet CTC，对外提供 WebSocket，默认端口 **6002**。
 
-本目录已从完整 sherpa-onnx 树精简，只保留编译 `newtranx-online-websocket-server` 所需源码。
+## 产物
+
+```text
+build/bin/newtranx-online-websocket-server
+build/lib/libonnxruntime.so
+```
 
 ## 编译
 
-在宿主机执行（Docker + QEMU aarch64）：
+在 x86 宿主机上用 Docker / QEMU 编 aarch64：
 
 ```bash
 ./build-cpu.sh --plan
 ./build-cpu.sh
 ```
 
-产物：
-
-- `build/bin/newtranx-online-websocket-server`
-- `build/lib/libonnxruntime.so`
-
-CMake 缓存在 `build-cache/`，不进 git。
+缓存目录 `build-cache/`，运行文件在 `build/`，都不进 git。
 
 ## 运行
 
@@ -26,4 +26,16 @@ CMake 缓存在 `build-cache/`，不进 git。
 docker compose up -d
 ```
 
-默认端口 **6002**。模型、授权、日志通过 volume 挂载，见 `docker-compose.yaml`。
+Compose 会挂载：
+
+- 模型：`model.int8.onnx.obfus`、`tokens.txt.obfus`
+- 授权：`license.txt`
+- 日志：`./logs/ug.log`
+
+识别参数：`--provider cpu`，`--num-threads=5`，`--num-work-threads=10`。
+
+本地直接起进程：
+
+```bash
+./start-server.sh --port=6002
+```
