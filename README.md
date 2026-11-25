@@ -11,12 +11,13 @@ build/lib/libonnxruntime.so
 
 ## 编译
 
-在 x86 宿主机上用 Docker / QEMU 编 aarch64：
-
 ```bash
 ./build-cpu.sh --plan
 ./build-cpu.sh
 ```
+
+ARM64 机器上直接 cmake（需 cmake、g++、libssl、libunwind）。
+x86 上用 Docker / QEMU。ARM 上若仍要走容器：`FORCE_DOCKER=1 ./build-cpu.sh`。
 
 缓存目录 `build-cache/`，运行文件在 `build/`，都不进 git。
 
