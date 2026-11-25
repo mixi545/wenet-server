@@ -9,10 +9,10 @@
 #   build/lib/libonnxruntime.so
 #
 # 用法：
-#   ./build-cpu.sh
-#   ./build-cpu.sh --plan
-#   BUILD_JOBS=16 ./build-cpu.sh
-#   FORCE_DOCKER=1 ./build-cpu.sh
+#   ./build.sh
+#   ./build.sh --plan
+#   BUILD_JOBS=16 ./build.sh
+#   FORCE_DOCKER=1 ./build.sh
 set -euo pipefail
 
 jobs="${BUILD_JOBS:-8}"
@@ -124,6 +124,6 @@ docker run --rm \
   -e HOME=/tmp \
   -e "BUILD_JOBS=$jobs" \
   "$image" \
-  /workspace/build-cpu.sh --inside
+  /workspace/build.sh --inside
 
 copy_runtime
