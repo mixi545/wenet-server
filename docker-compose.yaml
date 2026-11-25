@@ -1,0 +1,27 @@
+services:
+  langchao-ug-cpu:
+    image: newtranx-arm-cpu-ug:v1
+    container_name: langchao-ug-cpu
+    platform: linux/arm64
+    restart: always
+    # cpuset: "64-83"
+    mac_address: "12:f2:6a:00:5b:45"
+    ports:
+      - "6002:6002"
+    working_dir: /newtranx
+    volumes:
+      # - /data/luohuiliang/codes/latest/ug-cpu:/workspace:ro
+      - /data/luohuiliang/sdk-auth/outputs/mixi/ug_wenet_online:/models:ro
+      - /data/luohuiliang/sdk-auth/licenses/42/license.txt:/license/license.txt:ro
+      - ./logs:/logs
+    command:
+      - /newtranx/bin/newtranx-online-websocket-server
+      - --port=6002
+      - --num-threads=5
+      - --num-work-threads=10
+      - --max-batch-size=5
+      - --wenet-ctc-model=/models/model.int8.onnx.obfus
+      - --tokens=/models/tokens.txt.obfus
+      - --license=/license/license.txt
+      - --log-file=/logs/ug.log
+      - --provider=cpu
